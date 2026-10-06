@@ -23,7 +23,7 @@
         <span class="text-xl">🎯</span>
         <h1 class="text-lg font-black tracking-wider text-amber-400">DHP GAME ON</h1>
     </div>
-    <div id="match-status" class="text-[11px] font-semibold text-slate-400 hidden flex items-center space-x-2">
+    <div id="match-status" class="text-xs font-semibold text-slate-400 hidden flex items-center space-x-2">
         <span id="match-leg-indicator" class="bg-slate-800 text-amber-400 px-2 py-0.5 rounded-full font-bold">Leg 1</span>
         <span class="hidden sm:inline">Format: <span id="lbl-format" class="text-white"></span> | Start: <span id="lbl-start" class="text-white"></span></span>
     </div>
@@ -34,20 +34,20 @@
 
     <!-- 1. SETUP SCREEN -->
     <div id="screen-setup" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl my-auto">
-        <h2 class="text-xl font-bold mb-4 text-center text-white">Match Setup</h2>
+        <h2 class="text-2xl font-bold mb-4 text-center text-white">Match Setup</h2>
 
-        <div class="space-y-3 text-xs">
+        <div class="space-y-4 text-sm">
             <div>
                 <label class="block font-semibold text-slate-300 mb-1">Player 1 Name</label>
-                <input type="text" id="in-p1" placeholder="Player 1" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-400">
+                <input type="text" id="in-p1" placeholder="Player 1" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-amber-400">
             </div>
             <div>
                 <label class="block font-semibold text-slate-300 mb-1">Player 2 Name</label>
-                <input type="text" id="in-p2" placeholder="Player 2" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-400">
+                <input type="text" id="in-p2" placeholder="Player 2" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-amber-400">
             </div>
             <div>
                 <label class="block font-semibold text-slate-300 mb-1">Starting Score</label>
-                <select id="in-score" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-400">
+                <select id="in-score" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-amber-400">
                     <option value="170">170</option>
                     <option value="301">301</option>
                     <option value="501" selected>501</option>
@@ -55,12 +55,12 @@
             </div>
             <div>
                 <label class="block font-semibold text-slate-300 mb-1">Legs Format</label>
-                <select id="in-legs" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-400">
+                <select id="in-legs" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2.5 text-white focus:outline-none focus:border-amber-400">
                     <option value="3">Best of 3</option>
                     <option value="5" selected>Best of 5</option>
                 </select>
             </div>
-            <button onclick="goToBullScreen()" class="w-full mt-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2.5 px-4 rounded-xl transition duration-200 shadow-lg cursor-pointer text-sm">
+            <button onclick="goToBullScreen()" class="w-full mt-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 px-4 rounded-xl transition duration-200 shadow-lg cursor-pointer text-base">
                 GAME ON 🎯
             </button>
         </div>
@@ -68,83 +68,83 @@
 
     <!-- 2. BULL SCREEN -->
     <div id="screen-bull" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl hidden text-center my-auto">
-        <h2 class="text-xl font-bold mb-1 text-white">Who Won the Bull?</h2>
-        <p class="text-xs text-slate-400 mb-5">Select who throws first in the opening leg.</p>
-        <div class="grid grid-cols-2 gap-3">
-            <button onclick="startMatch(1)" id="bull-p1-btn" class="bg-slate-950 border border-slate-700 hover:border-amber-400 p-4 rounded-xl font-bold text-sm transition duration-200 cursor-pointer">
+        <h2 class="text-2xl font-bold mb-1 text-white">Who Won the Bull?</h2>
+        <p class="text-sm text-slate-400 mb-6">Select who throws first in the opening leg.</p>
+        <div class="grid grid-cols-2 gap-4">
+            <button onclick="startMatch(1)" id="bull-p1-btn" class="bg-slate-950 border border-slate-700 hover:border-amber-400 p-5 rounded-xl font-bold text-base transition duration-200 cursor-pointer">
                 Player 1
             </button>
-            <button onclick="startMatch(2)" id="bull-p2-btn" class="bg-slate-950 border border-slate-700 hover:border-amber-400 p-4 rounded-xl font-bold text-sm transition duration-200 cursor-pointer">
+            <button onclick="startMatch(2)" id="bull-p2-btn" class="bg-slate-950 border border-slate-700 hover:border-amber-400 p-5 rounded-xl font-bold text-base transition duration-200 cursor-pointer">
                 Player 2
             </button>
         </div>
     </div>
 
     <!-- 3. GAMEPLAY SCREEN -->
-    <div id="screen-game" class="w-full max-w-sm hidden flex flex-col justify-center h-full py-1">
+    <div id="screen-game" class="w-full max-w-sm hidden flex flex-col justify-between h-full py-0">
 
-        <!-- Match Scoreboard / Legs Header -->
-        <div class="grid grid-cols-2 gap-2.5 mb-2.5">
+        <!-- Match Scoreboard / Legs Header (Ultra-large scores for 2.5m viewing) -->
+        <div class="grid grid-cols-2 gap-3 mb-2">
             <!-- Player 1 Card -->
-            <div id="card-p1" class="bg-slate-900 border-2 border-slate-800 rounded-xl p-2.5 text-center transition-all duration-200">
-                <div id="name-p1-display" class="font-bold text-slate-400 truncate text-[11px]">Player 1</div>
-                <div id="score-p1" class="text-3xl font-black text-white my-0.5">501</div>
-                <div class="flex justify-center space-x-1 text-[10px] font-semibold text-slate-400">
-                    <span>Legs: <strong id="legs-p1" class="text-amber-400">0</strong></span>
+            <div id="card-p1" class="bg-slate-900 border-2 border-slate-800 rounded-2xl p-3 text-center transition-all duration-200">
+                <div id="name-p1-display" class="font-extrabold text-slate-400 truncate text-xs uppercase tracking-wider">Player 1</div>
+                <div id="score-p1" class="text-6xl font-black text-white my-1 tracking-tight">501</div>
+                <div class="flex justify-center space-x-1.5 text-xs font-bold text-slate-300">
+                    <span>Legs: <strong id="legs-p1" class="text-amber-400 text-sm">0</strong></span>
                     <span>•</span>
-                    <span>Darts: <strong id="darts-p1" class="text-white">0</strong></span>
+                    <span>Darts: <strong id="darts-p1" class="text-white text-sm">0</strong></span>
                 </div>
             </div>
             <!-- Player 2 Card -->
-            <div id="card-p2" class="bg-slate-900 border-2 border-slate-800 rounded-xl p-2.5 text-center transition-all duration-200">
-                <div id="name-p2-display" class="font-bold text-slate-400 truncate text-[11px]">Player 2</div>
-                <div id="score-p2" class="text-3xl font-black text-white my-0.5">501</div>
-                <div class="flex justify-center space-x-1 text-[10px] font-semibold text-slate-400">
-                    <span>Legs: <strong id="legs-p2" class="text-amber-400">0</strong></span>
+            <div id="card-p2" class="bg-slate-900 border-2 border-slate-800 rounded-2xl p-3 text-center transition-all duration-200">
+                <div id="name-p2-display" class="font-extrabold text-slate-400 truncate text-xs uppercase tracking-wider">Player 2</div>
+                <div id="score-p2" class="text-6xl font-black text-white my-1 tracking-tight">501</div>
+                <div class="flex justify-center space-x-1.5 text-xs font-bold text-slate-300">
+                    <span>Legs: <strong id="legs-p2" class="text-amber-400 text-sm">0</strong></span>
                     <span>•</span>
-                    <span>Darts: <strong id="darts-p2" class="text-white">0</strong></span>
+                    <span>Darts: <strong id="darts-p2" class="text-white text-sm">0</strong></span>
                 </div>
             </div>
         </div>
 
         <!-- Score Entry Box -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 shadow-xl text-center mb-2">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 shadow-xl text-center mb-1.5">
 
             <!-- Score Display Screen -->
             <div class="bg-slate-950 border border-slate-700 rounded-xl py-2 px-3 mb-2.5 flex justify-center items-center h-12">
-                <span id="keypad-input-display" class="text-2xl font-black text-white tracking-wider">0</span>
+                <span id="keypad-input-display" class="text-3xl font-black text-white tracking-wider">0</span>
             </div>
 
             <!-- Quick Score Buttons -->
-            <div class="grid grid-cols-5 gap-1 mb-2">
-                <button onclick="quickScore(0)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1 rounded-lg text-[11px] font-bold text-slate-300">0</button>
-                <button onclick="quickScore(26)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1 rounded-lg text-[11px] font-bold text-slate-300">26</button>
-                <button onclick="quickScore(60)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1 rounded-lg text-[11px] font-bold text-slate-300">60</button>
-                <button onclick="quickScore(100)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1 rounded-lg text-[11px] font-bold text-slate-300">100</button>
-                <button onclick="quickScore(140)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1 rounded-lg text-[11px] font-bold text-slate-300">140</button>
-                <button onclick="quickScore(180)" class="col-span-5 bg-slate-950 border border-slate-800 hover:bg-amber-500 hover:text-slate-950 py-1 rounded-lg text-[11px] font-bold text-amber-400 transition duration-200">180 🎯</button>
+            <div class="grid grid-cols-5 gap-1.5 mb-2">
+                <button onclick="quickScore(0)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1.5 rounded-lg text-xs font-bold text-slate-300">0</button>
+                <button onclick="quickScore(26)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1.5 rounded-lg text-xs font-bold text-slate-300">26</button>
+                <button onclick="quickScore(60)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1.5 rounded-lg text-xs font-bold text-slate-300">60</button>
+                <button onclick="quickScore(100)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1.5 rounded-lg text-xs font-bold text-slate-300">100</button>
+                <button onclick="quickScore(140)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1.5 rounded-lg text-xs font-bold text-slate-300">140</button>
+                <button onclick="quickScore(180)" class="col-span-5 bg-slate-950 border border-slate-800 hover:bg-amber-500 hover:text-slate-950 py-1.5 rounded-lg text-xs font-bold text-amber-400 transition duration-200">180 🎯</button>
             </div>
 
             <!-- Touch Keypad for Phones/Tablets -->
-            <div class="grid grid-cols-3 gap-1.5">
-                <button onclick="keypadPress('1')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">1</button>
-                <button onclick="keypadPress('2')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">2</button>
-                <button onclick="keypadPress('3')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">3</button>
-                <button onclick="keypadPress('4')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">4</button>
-                <button onclick="keypadPress('5')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">5</button>
-                <button onclick="keypadPress('6')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">6</button>
-                <button onclick="keypadPress('7')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">7</button>
-                <button onclick="keypadPress('8')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">8</button>
-                <button onclick="keypadPress('9')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">9</button>
-                <button onclick="keypadClear()" class="bg-red-950/40 border border-red-900/50 hover:bg-red-900/40 py-2.5 rounded-xl text-xs font-bold text-red-400 transition">C</button>
-                <button onclick="keypadPress('0')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">0</button>
+            <div class="grid grid-cols-3 gap-2">
+                <button onclick="keypadPress('1')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-lg font-bold text-white transition">1</button>
+                <button onclick="keypadPress('2')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-lg font-bold text-white transition">2</button>
+                <button onclick="keypadPress('3')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-lg font-bold text-white transition">3</button>
+                <button onclick="keypadPress('4')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-lg font-bold text-white transition">4</button>
+                <button onclick="keypadPress('5')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-lg font-bold text-white transition">5</button>
+                <button onclick="keypadPress('6')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-lg font-bold text-white transition">6</button>
+                <button onclick="keypadPress('7')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-lg font-bold text-white transition">7</button>
+                <button onclick="keypadPress('8')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-lg font-bold text-white transition">8</button>
+                <button onclick="keypadPress('9')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-lg font-bold text-white transition">9</button>
+                <button onclick="keypadClear()" class="bg-red-950/40 border border-red-900/50 hover:bg-red-900/40 py-2.5 rounded-xl text-sm font-bold text-red-400 transition">C</button>
+                <button onclick="keypadPress('0')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-lg font-bold text-white transition">0</button>
                 <button onclick="submitThrow()" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 py-2.5 rounded-xl text-xs font-black text-slate-950 transition shadow-md">ENTER</button>
             </div>
         </div>
 
         <!-- Action Controls / History Edit & Undo -->
-        <div class="flex justify-between items-center text-[11px] text-slate-400 px-1">
-            <div class="flex space-x-2">
+        <div class="flex justify-between items-center text-xs text-slate-400 px-1 pb-1">
+            <div class="flex space-x-2.5">
                 <button onclick="undoLastThrow()" class="text-amber-400 hover:underline font-semibold cursor-pointer">↩️ Undo</button>
                 <span class="text-slate-600">|</span>
                 <button onclick="openHistoryModal()" class="text-slate-300 hover:text-white font-semibold cursor-pointer">✏️ History / Reopen Leg</button>
@@ -157,11 +157,11 @@
 
 <!-- CHECKOUT MODAL -->
 <div id="modal-checkout" class="fixed inset-0 bg-black/80 flex items-center justify-center p-3 hidden z-50">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 max-w-xs w-full text-center shadow-2xl">
-        <h3 class="text-lg font-black text-amber-400 mb-1">🎯 Leg Finished!</h3>
-        <p id="checkout-player-label" class="text-xs font-bold text-white mb-3">Player reached 0</p>
-        <p class="text-[11px] text-slate-400 mb-4">How many darts were thrown on this final turn?</p>
-        <div id="checkout-buttons-container" class="grid gap-2">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-xs w-full text-center shadow-2xl">
+        <h3 class="text-xl font-black text-amber-400 mb-2">🎯 Leg Finished!</h3>
+        <p id="checkout-player-label" class="text-sm font-bold text-white mb-3">Player reached 0</p>
+        <p class="text-xs text-slate-400 mb-5">How many darts were thrown on this final turn?</p>
+        <div id="checkout-buttons-container" class="grid gap-2.5">
             <!-- Dynamically injected via JS -->
         </div>
     </div>
@@ -169,15 +169,15 @@
 
 <!-- EDIT THROWS HISTORY MODAL (INCLUDES FINISHED LEGS) -->
 <div id="modal-history" class="fixed inset-0 bg-black/80 flex items-center justify-center p-3 hidden z-50">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 max-w-sm w-full max-h-[85vh] flex flex-col shadow-2xl">
-        <h2 class="text-lg font-black text-amber-400 mb-1 text-center">Match History & Leg Correction</h2>
-        <p class="text-[11px] text-slate-400 mb-3 text-center">Reopen any completed leg below to edit its throws.</p>
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full max-h-[85vh] flex flex-col shadow-2xl">
+        <h2 class="text-xl font-black text-amber-400 mb-1 text-center">Match History & Leg Correction</h2>
+        <p class="text-xs text-slate-400 mb-4 text-center">Reopen any completed leg below to edit its throws.</p>
 
-        <div id="history-list-content" class="overflow-y-auto space-y-2.5 pr-1 mb-3 flex-grow text-xs">
+        <div id="history-list-content" class="overflow-y-auto space-y-3 pr-1 mb-4 flex-grow text-sm">
             <!-- Injected via JavaScript -->
         </div>
 
-        <button onclick="closeHistoryModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-xl transition cursor-pointer text-xs">
+        <button onclick="closeHistoryModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl transition cursor-pointer text-sm">
             Close & Return
         </button>
     </div>
@@ -185,32 +185,32 @@
 
 <!-- EDIT KEYPAD POPUP MODAL -->
 <div id="modal-edit-keypad" class="fixed inset-0 bg-black/90 flex items-center justify-center p-3 hidden z-50">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 max-w-xs w-full shadow-2xl text-center">
-        <h3 class="text-base font-black text-amber-400 mb-1">Correct Throw Score</h3>
-        <p id="edit-player-label" class="text-[11px] text-slate-400 mb-3">Editing throw for Player</p>
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-xs w-full shadow-2xl text-center">
+        <h3 class="text-lg font-black text-amber-400 mb-1">Correct Throw Score</h3>
+        <p id="edit-player-label" class="text-xs text-slate-400 mb-4">Editing throw for Player</p>
 
         <!-- Screen Input Display -->
-        <div class="bg-slate-950 border border-slate-700 rounded-xl py-2 px-3 mb-3 flex justify-center items-center h-12">
-            <span id="edit-input-display" class="text-2xl font-black text-white tracking-wider">0</span>
+        <div class="bg-slate-950 border border-slate-700 rounded-xl py-2 px-3 mb-4 flex justify-center items-center h-14">
+            <span id="edit-input-display" class="text-3xl font-black text-white tracking-wider">0</span>
         </div>
 
         <!-- Keypad Buttons -->
-        <div class="grid grid-cols-3 gap-1.5 mb-3">
-            <button onclick="editKeypadPress('1')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">1</button>
-            <button onclick="editKeypadPress('2')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">2</button>
-            <button onclick="editKeypadPress('3')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">3</button>
-            <button onclick="editKeypadPress('4')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">4</button>
-            <button onclick="editKeypadPress('5')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">5</button>
-            <button onclick="editKeypadPress('6')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">6</button>
-            <button onclick="editKeypadPress('7')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">7</button>
-            <button onclick="editKeypadPress('8')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">8</button>
-            <button onclick="editKeypadPress('9')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">9</button>
-            <button onclick="editKeypadClear()" class="bg-red-950/40 border border-red-900/50 hover:bg-red-900/40 py-2.5 rounded-xl text-xs font-bold text-red-400 transition">C</button>
-            <button onclick="editKeypadPress('0')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">0</button>
-            <button onclick="saveEditedThrow()" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 py-2.5 rounded-xl text-xs font-black text-slate-950 transition shadow-md">SAVE</button>
+        <div class="grid grid-cols-3 gap-2 mb-4">
+            <button onclick="editKeypadPress('1')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-3 rounded-xl text-lg font-bold text-white transition">1</button>
+            <button onclick="editKeypadPress('2')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-3 rounded-xl text-lg font-bold text-white transition">2</button>
+            <button onclick="editKeypadPress('3')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-3 rounded-xl text-lg font-bold text-white transition">3</button>
+            <button onclick="editKeypadPress('4')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-3 rounded-xl text-lg font-bold text-white transition">4</button>
+            <button onclick="editKeypadPress('5')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-3 rounded-xl text-lg font-bold text-white transition">5</button>
+            <button onclick="editKeypadPress('6')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-3 rounded-xl text-lg font-bold text-white transition">6</button>
+            <button onclick="editKeypadPress('7')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-3 rounded-xl text-lg font-bold text-white transition">7</button>
+            <button onclick="editKeypadPress('8')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-3 rounded-xl text-lg font-bold text-white transition">8</button>
+            <button onclick="editKeypadPress('9')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-3 rounded-xl text-lg font-bold text-white transition">9</button>
+            <button onclick="editKeypadClear()" class="bg-red-950/40 border border-red-900/50 hover:bg-red-900/40 py-3 rounded-xl text-sm font-bold text-red-400 transition">C</button>
+            <button onclick="editKeypadPress('0')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-3 rounded-xl text-lg font-bold text-white transition">0</button>
+            <button onclick="saveEditedThrow()" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 py-3 rounded-xl text-sm font-black text-slate-950 transition shadow-md">SAVE</button>
         </div>
 
-        <button onclick="cancelEditThrow()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-xl text-xs transition cursor-pointer">
+        <button onclick="cancelEditThrow()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-sm transition cursor-pointer">
             Cancel
         </button>
     </div>
@@ -218,21 +218,21 @@
 
 <!-- MATCH SUMMARY MODAL -->
 <div id="modal-summary" class="fixed inset-0 bg-black/80 flex items-center justify-center p-3 hidden z-50">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 max-w-sm w-full max-h-[85vh] flex flex-col shadow-2xl">
-        <h2 id="modal-title" class="text-xl font-black text-amber-400 mb-3 text-center">Match Finished!</h2>
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full max-h-[85vh] flex flex-col shadow-2xl">
+        <h2 id="modal-title" class="text-2xl font-black text-amber-400 mb-3 text-center">Match Finished!</h2>
 
-        <div id="match-recap-content" class="overflow-y-auto space-y-4 pr-1 mb-4 flex-grow text-xs">
+        <div id="match-recap-content" class="overflow-y-auto space-y-3 pr-1 mb-4 flex-grow text-sm">
             <!-- Injected via JavaScript -->
         </div>
 
-        <button onclick="resetMatch()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2.5 rounded-xl transition duration-200 cursor-pointer text-xs">
+        <button onclick="resetMatch()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl transition duration-200 cursor-pointer text-sm">
             Start New Match
         </button>
     </div>
 </div>
 
 <!-- Footer -->
-<footer class="py-2 text-center text-[10px] text-slate-600 shrink-0">
+<footer class="py-1 text-center text-[10px] text-slate-600 shrink-0">
     Game On Darts Scoreboard &bull; Mobile Ready
 </footer>
 
@@ -465,19 +465,19 @@
 
         let buttonsHtml = '';
         if (possibleIn1) {
-            buttonsHtml += `<button onclick="finalizeCheckout(1)" class="bg-slate-950 border border-slate-700 hover:border-amber-400 py-3 rounded-xl text-base font-black text-white transition cursor-pointer">1 Dart</button>`;
+            buttonsHtml += `<button onclick="finalizeCheckout(1)" class="bg-slate-950 border border-slate-700 hover:border-amber-400 py-3.5 rounded-xl text-base font-black text-white transition cursor-pointer">1 Dart</button>`;
         }
         if (possibleIn2) {
-            buttonsHtml += `<button onclick="finalizeCheckout(2)" class="bg-slate-950 border border-slate-700 hover:border-amber-400 py-3 rounded-xl text-base font-black text-white transition cursor-pointer">2 Darts</button>`;
+            buttonsHtml += `<button onclick="finalizeCheckout(2)" class="bg-slate-950 border border-slate-700 hover:border-amber-400 py-3.5 rounded-xl text-base font-black text-white transition cursor-pointer">2 Darts</button>`;
         }
-        buttonsHtml += `<button onclick="finalizeCheckout(3)" class="bg-slate-950 border border-slate-700 hover:border-amber-400 py-3 rounded-xl text-base font-black text-white transition cursor-pointer">3 Darts</button>`;
+        buttonsHtml += `<button onclick="finalizeCheckout(3)" class="bg-slate-950 border border-slate-700 hover:border-amber-400 py-3.5 rounded-xl text-base font-black text-white transition cursor-pointer">3 Darts</button>`;
 
         const container = document.getElementById('checkout-buttons-container');
         let colsCount = 1;
         if (possibleIn1 && possibleIn2) colsCount = 3;
         else if (possibleIn1 || possibleIn2) colsCount = 2;
 
-        container.className = `grid grid-cols-${colsCount} gap-2`;
+        container.className = `grid grid-cols-${colsCount} gap-2.5`;
         container.innerHTML = buttonsHtml;
 
         window.pendingLegWinner = winnerPlayer;
@@ -541,17 +541,17 @@
         const cardP2 = document.getElementById('card-p2');
 
         if (state.activeTurn === 1) {
-            cardP1.className = "bg-slate-900 border-2 border-amber-400 shadow-md shadow-amber-500/20 rounded-xl p-2.5 text-center transition-all duration-200";
-            cardP2.className = "bg-slate-900/50 border-2 border-slate-800/80 opacity-70 rounded-xl p-2.5 text-center transition-all duration-200";
+            cardP1.className = "bg-slate-900 border-2 border-amber-400 shadow-md shadow-amber-500/20 rounded-2xl p-3 text-center transition-all duration-200";
+            cardP2.className = "bg-slate-900/50 border-2 border-slate-800/80 opacity-70 rounded-2xl p-3 text-center transition-all duration-200";
 
-            document.getElementById('name-p1-display').className = "font-black text-amber-400 truncate text-[11px] uppercase tracking-wider";
-            document.getElementById('name-p2-display').className = "font-bold text-slate-500 truncate text-[11px]";
+            document.getElementById('name-p1-display').className = "font-extrabold text-amber-400 truncate text-xs uppercase tracking-wider";
+            document.getElementById('name-p2-display').className = "font-bold text-slate-500 truncate text-xs";
         } else {
-            cardP2.className = "bg-slate-900 border-2 border-amber-400 shadow-md shadow-amber-500/20 rounded-xl p-2.5 text-center transition-all duration-200";
-            cardP1.className = "bg-slate-900/50 border-2 border-slate-800/80 opacity-70 rounded-xl p-2.5 text-center transition-all duration-200";
+            cardP2.className = "bg-slate-900 border-2 border-amber-400 shadow-md shadow-amber-500/20 rounded-2xl p-3 text-center transition-all duration-200";
+            cardP1.className = "bg-slate-900/50 border-2 border-slate-800/80 opacity-70 rounded-2xl p-3 text-center transition-all duration-200";
 
-            document.getElementById('name-p2-display').className = "font-black text-amber-400 truncate text-[11px] uppercase tracking-wider";
-            document.getElementById('name-p1-display').className = "font-bold text-slate-500 truncate text-[11px]";
+            document.getElementById('name-p2-display').className = "font-extrabold text-amber-400 truncate text-xs uppercase tracking-wider";
+            document.getElementById('name-p1-display').className = "font-bold text-slate-500 truncate text-xs";
         }
     }
 
@@ -559,15 +559,15 @@
         let contentHtml = '';
 
         if (state.allLegsHistory.length > 0) {
-            contentHtml += `<div class="text-amber-400 font-bold mb-1.5">Completed Legs (Tap to Reopen):</div>`;
+            contentHtml += `<div class="text-amber-400 font-bold mb-2">Completed Legs (Tap to Reopen):</div>`;
             state.allLegsHistory.forEach((leg) => {
                 contentHtml += `
-                        <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl mb-2">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="font-bold text-white text-xs">Leg ${leg.legNumber} (${leg.winner})</span>
-                                <button onclick="reopenLeg(${leg.legNumber})" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1 rounded-lg text-[10px] font-black transition cursor-pointer">Reopen</button>
+                        <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl mb-2.5">
+                            <div class="flex justify-between items-center mb-1.5">
+                                <span class="font-bold text-white text-sm">Leg ${leg.legNumber} (${leg.winner})</span>
+                                <button onclick="reopenLeg(${leg.legNumber})" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-3 py-1 rounded-lg text-xs font-black transition cursor-pointer">Reopen</button>
                             </div>
-                            <div class="space-y-0.5 text-slate-400 pl-1 border-l border-slate-800 text-[10px]">
+                            <div class="space-y-1 text-slate-400 pl-2 border-l border-slate-800 text-xs">
                     `;
                 leg.visits.forEach(v => {
                     contentHtml += `<div>${v.playerName}: ${v.scored} pts</div>`;
@@ -576,21 +576,21 @@
             });
         }
 
-        contentHtml += `<div class="text-amber-400 font-bold mt-3 mb-1.5">Current Leg Throws:</div>`;
+        contentHtml += `<div class="text-amber-400 font-bold mt-4 mb-2">Current Leg Throws:</div>`;
         if (state.currentLegVisits.length === 0) {
-            contentHtml += '<p class="text-slate-500 text-center py-2 text-[11px]">No throws recorded yet.</p>';
+            contentHtml += '<p class="text-slate-500 text-center py-3 text-xs">No throws recorded yet.</p>';
         } else {
             state.currentLegVisits.forEach((v, idx) => {
-                let badge = v.isBust ? '<span class="text-red-400 font-bold ml-1">[BUST]</span>' : '';
+                let badge = v.isBust ? '<span class="text-red-400 font-bold ml-1.5">[BUST]</span>' : '';
                 contentHtml += `
-                        <div class="flex justify-between items-center bg-slate-950 border border-slate-800 p-2 rounded-xl mb-1.5">
+                        <div class="flex justify-between items-center bg-slate-950 border border-slate-800 p-2.5 rounded-xl mb-2">
                             <div>
-                                <span class="text-slate-400 font-medium text-[10px]">#${idx + 1}</span>
-                                <strong class="text-white ml-1 text-xs">${v.playerName}</strong>
+                                <span class="text-slate-400 font-medium text-xs">#${idx + 1}</span>
+                                <strong class="text-white ml-1.5 text-sm">${v.playerName}</strong>
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-amber-400 font-bold text-xs">${v.scored} pts</span> ${badge}
-                                <button onclick="openEditKeypad(${idx})" class="bg-slate-800 hover:bg-slate-700 text-white px-2 py-0.5 rounded-lg text-[10px] font-semibold cursor-pointer">Edit</button>
+                            <div class="flex items-center space-x-2.5">
+                                <span class="text-amber-400 font-bold text-sm">${v.scored} pts</span> ${badge}
+                                <button onclick="openEditKeypad(${idx})" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer">Edit</button>
                             </div>
                         </div>
                     `;
@@ -696,22 +696,22 @@
         let htmlContent = '';
         state.allLegsHistory.forEach(leg => {
             htmlContent += `
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 mb-2">
-                        <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-1.5">
-                            <h3 class="font-bold text-amber-400 text-xs">Leg ${leg.legNumber}</h3>
-                            <div class="flex items-center space-x-1.5">
-                                <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-semibold">Winner: ${leg.winner}</span>
-                                <button onclick="closeMatchSummaryAndReopen(${leg.legNumber})" class="bg-slate-800 hover:bg-slate-700 text-amber-400 px-2 py-0.5 rounded text-[10px] font-semibold cursor-pointer">Reopen</button>
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 mb-2.5">
+                        <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
+                            <h3 class="font-bold text-amber-400 text-sm">Leg ${leg.legNumber}</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-semibold">Winner: ${leg.winner}</span>
+                                <button onclick="closeMatchSummaryAndReopen(${leg.legNumber})" class="bg-slate-800 hover:bg-slate-700 text-amber-400 px-2.5 py-1 rounded text-xs font-semibold cursor-pointer">Reopen</button>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-300">
-                            <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                                <div class="font-bold text-white mb-0.5">${state.p1Name}</div>
+                        <div class="grid grid-cols-2 gap-2.5 text-xs text-slate-300">
+                            <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                                <div class="font-bold text-white mb-1">${state.p1Name}</div>
                                 <div>Darts: <span class="text-amber-400 font-semibold">${leg.p1FinalDarts}</span></div>
                                 <div>Rest: <span class="text-white font-semibold">${leg.p1FinalRest}</span></div>
                             </div>
-                            <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                                <div class="font-bold text-white mb-0.5">${state.p2Name}</div>
+                            <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                                <div class="font-bold text-white mb-1">${state.p2Name}</div>
                                 <div>Darts: <span class="text-amber-400 font-semibold">${leg.p2FinalDarts}</span></div>
                                 <div>Rest: <span class="text-white font-semibold">${leg.p2FinalRest}</span></div>
                             </div>
