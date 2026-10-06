@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DHP Game On</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overscroll-behavior-y: contain;
+        }
+    </style>
+    <script src="./js/serviceWorker.js" defer></script>
+</head>
+<body class="bg-slate-950 text-slate-100 h-screen flex flex-col justify-between select-none overflow-hidden">
+
+<!-- Header -->
+<header class="bg-slate-900 border-b border-slate-800 py-2.5 px-4 shadow-md flex justify-between items-center shrink-0">
+    <div class="flex items-center space-x-2">
+        <span class="text-xl">🎯</span>
+        <h1 class="text-lg font-black tracking-wider text-amber-400">DHP GAME ON</h1>
+    </div>
+    <div id="match-status" class="text-[11px] font-semibold text-slate-400 hidden flex items-center space-x-2">
+        <span id="match-leg-indicator" class="bg-slate-800 text-amber-400 px-2 py-0.5 rounded-full font-bold">Leg 1</span>
+        <span class="hidden sm:inline">Format: <span id="lbl-format" class="text-white"></span> | Start: <span id="lbl-start" class="text-white"></span></span>
+    </div>
+</header>
+
+<!-- Main Container -->
+<main class="flex-grow flex items-center justify-center p-3 overflow-y-auto">
+
+    <!-- 1. SETUP SCREEN -->
+    <div id="screen-setup" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl my-auto">
+        <h2 class="text-xl font-bold mb-4 text-center text-white">Match Setup</h2>
+
+        <div class="space-y-3 text-xs">
+            <div>
+                <label class="block font-semibold text-slate-300 mb-1">Player 1 Name</label>
+                <input type="text" id="in-p1" placeholder="Player 1" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-400">
+            </div>
+            <div>
+                <label class="block font-semibold text-slate-300 mb-1">Player 2 Name</label>
+                <input type="text" id="in-p2" placeholder="Player 2" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-400">
+            </div>
+            <div>
+                <label class="block font-semibold text-slate-300 mb-1">Starting Score</label>
+                <select id="in-score" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-400">
+                    <option value="170">170</option>
+                    <option value="301">301</option>
+                    <option value="501" selected>501</option>
+                </select>
+            </div>
+            <div>
+                <label class="block font-semibold text-slate-300 mb-1">Legs Format</label>
+                <select id="in-legs" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-400">
+                    <option value="3">Best of 3</option>
+                    <option value="5" selected>Best of 5</option>
+                </select>
+            </div>
+            <button onclick="goToBullScreen()" class="w-full mt-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2.5 px-4 rounded-xl transition duration-200 shadow-lg cursor-pointer text-sm">
+                GAME ON 🎯
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. BULL SCREEN -->
+    <div id="screen-bull" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl hidden text-center my-auto">
+        <h2 class="text-xl font-bold mb-1 text-white">Who Won the Bull?</h2>
+        <p class="text-xs text-slate-400 mb-5">Select who throws first in the opening leg.</p>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="startMatch(1)" id="bull-p1-btn" class="bg-slate-950 border border-slate-700 hover:border-amber-400 p-4 rounded-xl font-bold text-sm transition duration-200 cursor-pointer">
+                Player 1
+            </button>
+            <button onclick="startMatch(2)" id="bull-p2-btn" class="bg-slate-950 border border-slate-700 hover:border-amber-400 p-4 rounded-xl font-bold text-sm transition duration-200 cursor-pointer">
+                Player 2
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. GAMEPLAY SCREEN -->
+    <div id="screen-game" class="w-full max-w-sm hidden flex flex-col justify-center h-full py-1">
+
+        <!-- Match Scoreboard / Legs Header -->
+        <div class="grid grid-cols-2 gap-2.5 mb-2.5">
+            <!-- Player 1 Card -->
+            <div id="card-p1" class="bg-slate-900 border-2 border-slate-800 rounded-xl p-2.5 text-center transition-all duration-200">
+                <div id="name-p1-display" class="font-bold text-slate-400 truncate text-[11px]">Player 1</div>
+                <div id="score-p1" class="text-3xl font-black text-white my-0.5">501</div>
+                <div class="flex justify-center space-x-1 text-[10px] font-semibold text-slate-400">
+                    <span>Legs: <strong id="legs-p1" class="text-amber-400">0</strong></span>
+                    <span>•</span>
+                    <span>Darts: <strong id="darts-p1" class="text-white">0</strong></span>
+                </div>
+            </div>
+            <!-- Player 2 Card -->
+            <div id="card-p2" class="bg-slate-900 border-2 border-slate-800 rounded-xl p-2.5 text-center transition-all duration-200">
+                <div id="name-p2-display" class="font-bold text-slate-400 truncate text-[11px]">Player 2</div>
+                <div id="score-p2" class="text-3xl font-black text-white my-0.5">501</div>
+                <div class="flex justify-center space-x-1 text-[10px] font-semibold text-slate-400">
+                    <span>Legs: <strong id="legs-p2" class="text-amber-400">0</strong></span>
+                    <span>•</span>
+                    <span>Darts: <strong id="darts-p2" class="text-white">0</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score Entry Box -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 shadow-xl text-center mb-2">
+
+            <!-- Score Display Screen -->
+            <div class="bg-slate-950 border border-slate-700 rounded-xl py-2 px-3 mb-2.5 flex justify-center items-center h-12">
+                <span id="keypad-input-display" class="text-2xl font-black text-white tracking-wider">0</span>
+            </div>
+
+            <!-- Quick Score Buttons -->
+            <div class="grid grid-cols-5 gap-1 mb-2">
+                <button onclick="quickScore(0)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1 rounded-lg text-[11px] font-bold text-slate-300">0</button>
+                <button onclick="quickScore(26)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1 rounded-lg text-[11px] font-bold text-slate-300">26</button>
+                <button onclick="quickScore(60)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1 rounded-lg text-[11px] font-bold text-slate-300">60</button>
+                <button onclick="quickScore(100)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1 rounded-lg text-[11px] font-bold text-slate-300">100</button>
+                <button onclick="quickScore(140)" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 py-1 rounded-lg text-[11px] font-bold text-slate-300">140</button>
+                <button onclick="quickScore(180)" class="col-span-5 bg-slate-950 border border-slate-800 hover:bg-amber-500 hover:text-slate-950 py-1 rounded-lg text-[11px] font-bold text-amber-400 transition duration-200">180 🎯</button>
+            </div>
+
+            <!-- Touch Keypad for Phones/Tablets -->
+            <div class="grid grid-cols-3 gap-1.5">
+                <button onclick="keypadPress('1')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">1</button>
+                <button onclick="keypadPress('2')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">2</button>
+                <button onclick="keypadPress('3')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">3</button>
+                <button onclick="keypadPress('4')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">4</button>
+                <button onclick="keypadPress('5')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">5</button>
+                <button onclick="keypadPress('6')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">6</button>
+                <button onclick="keypadPress('7')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">7</button>
+                <button onclick="keypadPress('8')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">8</button>
+                <button onclick="keypadPress('9')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">9</button>
+                <button onclick="keypadClear()" class="bg-red-950/40 border border-red-900/50 hover:bg-red-900/40 py-2.5 rounded-xl text-xs font-bold text-red-400 transition">C</button>
+                <button onclick="keypadPress('0')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">0</button>
+                <button onclick="submitThrow()" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 py-2.5 rounded-xl text-xs font-black text-slate-950 transition shadow-md">ENTER</button>
+            </div>
+        </div>
+
+        <!-- Action Controls / History Edit & Undo -->
+        <div class="flex justify-between items-center text-[11px] text-slate-400 px-1">
+            <div class="flex space-x-2">
+                <button onclick="undoLastThrow()" class="text-amber-400 hover:underline font-semibold cursor-pointer">↩️ Undo</button>
+                <span class="text-slate-600">|</span>
+                <button onclick="openHistoryModal()" class="text-slate-300 hover:text-white font-semibold cursor-pointer">✏️ History / Reopen Leg</button>
+            </div>
+            <button onclick="resetMatch()" class="hover:text-red-400 transition duration-150 underline cursor-pointer">Reset</button>
+        </div>
+    </div>
+
+</main>
+
+<!-- CHECKOUT MODAL -->
+<div id="modal-checkout" class="fixed inset-0 bg-black/80 flex items-center justify-center p-3 hidden z-50">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 max-w-xs w-full text-center shadow-2xl">
+        <h3 class="text-lg font-black text-amber-400 mb-1">🎯 Leg Finished!</h3>
+        <p id="checkout-player-label" class="text-xs font-bold text-white mb-3">Player reached 0</p>
+        <p class="text-[11px] text-slate-400 mb-4">How many darts were thrown on this final turn?</p>
+        <div id="checkout-buttons-container" class="grid gap-2">
+            <!-- Dynamically injected via JS -->
+        </div>
+    </div>
+</div>
+
+<!-- EDIT THROWS HISTORY MODAL (INCLUDES FINISHED LEGS) -->
+<div id="modal-history" class="fixed inset-0 bg-black/80 flex items-center justify-center p-3 hidden z-50">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 max-w-sm w-full max-h-[85vh] flex flex-col shadow-2xl">
+        <h2 class="text-lg font-black text-amber-400 mb-1 text-center">Match History & Leg Correction</h2>
+        <p class="text-[11px] text-slate-400 mb-3 text-center">Reopen any completed leg below to edit its throws.</p>
+
+        <div id="history-list-content" class="overflow-y-auto space-y-2.5 pr-1 mb-3 flex-grow text-xs">
+            <!-- Injected via JavaScript -->
+        </div>
+
+        <button onclick="closeHistoryModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-xl transition cursor-pointer text-xs">
+            Close & Return
+        </button>
+    </div>
+</div>
+
+<!-- EDIT KEYPAD POPUP MODAL -->
+<div id="modal-edit-keypad" class="fixed inset-0 bg-black/90 flex items-center justify-center p-3 hidden z-50">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 max-w-xs w-full shadow-2xl text-center">
+        <h3 class="text-base font-black text-amber-400 mb-1">Correct Throw Score</h3>
+        <p id="edit-player-label" class="text-[11px] text-slate-400 mb-3">Editing throw for Player</p>
+
+        <!-- Screen Input Display -->
+        <div class="bg-slate-950 border border-slate-700 rounded-xl py-2 px-3 mb-3 flex justify-center items-center h-12">
+            <span id="edit-input-display" class="text-2xl font-black text-white tracking-wider">0</span>
+        </div>
+
+        <!-- Keypad Buttons -->
+        <div class="grid grid-cols-3 gap-1.5 mb-3">
+            <button onclick="editKeypadPress('1')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">1</button>
+            <button onclick="editKeypadPress('2')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">2</button>
+            <button onclick="editKeypadPress('3')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">3</button>
+            <button onclick="editKeypadPress('4')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">4</button>
+            <button onclick="editKeypadPress('5')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">5</button>
+            <button onclick="editKeypadPress('6')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">6</button>
+            <button onclick="editKeypadPress('7')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">7</button>
+            <button onclick="editKeypadPress('8')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">8</button>
+            <button onclick="editKeypadPress('9')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">9</button>
+            <button onclick="editKeypadClear()" class="bg-red-950/40 border border-red-900/50 hover:bg-red-900/40 py-2.5 rounded-xl text-xs font-bold text-red-400 transition">C</button>
+            <button onclick="editKeypadPress('0')" class="bg-slate-950 border border-slate-800 hover:bg-slate-800 active:bg-amber-500 active:text-slate-950 py-2.5 rounded-xl text-base font-bold text-white transition">0</button>
+            <button onclick="saveEditedThrow()" class="bg-amber-500 hover:bg-amber-400 active:bg-amber-600 py-2.5 rounded-xl text-xs font-black text-slate-950 transition shadow-md">SAVE</button>
+        </div>
+
+        <button onclick="cancelEditThrow()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-xl text-xs transition cursor-pointer">
+            Cancel
+        </button>
+    </div>
+</div>
+
+<!-- MATCH SUMMARY MODAL -->
+<div id="modal-summary" class="fixed inset-0 bg-black/80 flex items-center justify-center p-3 hidden z-50">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 max-w-sm w-full max-h-[85vh] flex flex-col shadow-2xl">
+        <h2 id="modal-title" class="text-xl font-black text-amber-400 mb-3 text-center">Match Finished!</h2>
+
+        <div id="match-recap-content" class="overflow-y-auto space-y-4 pr-1 mb-4 flex-grow text-xs">
+            <!-- Injected via JavaScript -->
+        </div>
+
+        <button onclick="resetMatch()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2.5 rounded-xl transition duration-200 cursor-pointer text-xs">
+            Start New Match
+        </button>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="py-2 text-center text-[10px] text-slate-600 shrink-0">
+    Game On Darts Scoreboard &bull; Mobile Ready
+</footer>
+
+<!-- JAVASCRIPT GAME LOGIC -->
+<script>
+    let state = {
+        p1Name: "Player 1",
+        p2Name: "Player 2",
+        startScore: 501,
+        maxLegs: 5,
+        legsToWin: 3,
+        bullWinner: 1,
+        p1Legs: 0,
+        p2Legs: 0,
+        p1Score: 501,
+        p2Score: 501,
+        p1LegDarts: 0,
+        p2LegDarts: 0,
+        activeTurn: 1,
+        matchOver: false,
+        currentLegNumber: 1,
+        allLegsHistory: [],
+        currentLegVisits: [],
+        currentInputString: "",
+        editingVisitIndex: null,
+        editingInputString: "",
+        isFreshEditInput: true
+    };
+
+    window.addEventListener('touchmove', function(e) {
+        if (e.touches.length > 1) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    function goToBullScreen() {
+        state.p1Name = document.getElementById('in-p1').value.trim() || "Player 1";
+        state.p2Name = document.getElementById('in-p2').value.trim() || "Player 2";
+        state.startScore = parseInt(document.getElementById('in-score').value);
+        state.maxLegs = parseInt(document.getElementById('in-legs').value);
+        state.legsToWin = Math.ceil(state.maxLegs / 2);
+
+        document.getElementById('bull-p1-btn').innerText = state.p1Name;
+        document.getElementById('bull-p2-btn').innerText = state.p2Name;
+
+        document.getElementById('screen-setup').classList.add('hidden');
+        document.getElementById('screen-bull').classList.remove('hidden');
+    }
+
+    function startMatch(bullWinnerPlayer) {
+        state.bullWinner = bullWinnerPlayer;
+        state.p1Legs = 0;
+        state.p2Legs = 0;
+        state.currentLegNumber = 1;
+        state.allLegsHistory = [];
+        state.matchOver = false;
+
+        document.getElementById('name-p1-display').innerText = state.p1Name;
+        document.getElementById('name-p2-display').innerText = state.p2Name;
+        document.getElementById('lbl-format').innerText = `Best of ${state.maxLegs}`;
+        document.getElementById('lbl-start').innerText = state.startScore;
+        document.getElementById('match-status').classList.remove('hidden');
+
+        document.getElementById('screen-bull').classList.add('hidden');
+        document.getElementById('screen-game').classList.remove('hidden');
+
+        initNewLeg();
+    }
+
+    function initNewLeg() {
+        state.p1Score = state.startScore;
+        state.p2Score = state.startScore;
+        state.p1LegDarts = 0;
+        state.p2LegDarts = 0;
+        state.currentLegVisits = [];
+        state.currentInputString = "";
+
+        if (state.currentLegNumber % 2 !== 0) {
+            state.activeTurn = state.bullWinner;
+        } else {
+            state.activeTurn = state.bullWinner === 1 ? 2 : 1;
+        }
+
+        updateUI();
+    }
+
+    function keypadPress(numChar) {
+        if (state.currentInputString === "0") {
+            state.currentInputString = numChar;
+        } else {
+            let newVal = state.currentInputString + numChar;
+            if (parseInt(newVal) > 180) {
+                newVal = "180";
+            }
+            state.currentInputString = newVal;
+        }
+        updateKeypadDisplay();
+    }
+
+    function keypadClear() {
+        state.currentInputString = "";
+        updateKeypadDisplay();
+    }
+
+    function quickScore(val) {
+        state.currentInputString = val.toString();
+        updateKeypadDisplay();
+        submitThrow();
+    }
+
+    function updateKeypadDisplay() {
+        const displayEl = document.getElementById('keypad-input-display');
+        displayEl.innerText = state.currentInputString === "" ? "0" : state.currentInputString;
+    }
+
+    function submitThrow() {
+        if (state.matchOver) return;
+        if (state.currentInputString === "") return;
+
+        const points = parseInt(state.currentInputString);
+
+        if (isNaN(points) || points < 0 || points > 180) {
+            alert("Please enter a valid score between 0 and 180.");
+            keypadClear();
+            return;
+        }
+
+        state.currentLegVisits.push({
+            player: state.activeTurn,
+            playerName: state.activeTurn === 1 ? state.p1Name : state.p2Name,
+            scored: points,
+            isBust: false
+        });
+
+        keypadClear();
+        recalculateLegScores();
+
+        if (state.p1Score === 0 || state.p2Score === 0) {
+            let winner = state.p1Score === 0 ? 1 : 2;
+            let winningScoreBeforeCheckout = winner === 1 ? (state.p1Score + points) : (state.p2Score + points);
+            openCheckoutModal(winner, winningScoreBeforeCheckout);
+            return;
+        }
+    }
+
+    function undoLastThrow() {
+        if (state.currentLegVisits.length === 0) {
+            alert("No throws to undo in this leg.");
+            return;
+        }
+        state.currentLegVisits.pop();
+        recalculateLegScores();
+    }
+
+    function recalculateLegScores() {
+        let s1 = state.startScore;
+        let s2 = state.startScore;
+        let d1 = 0;
+        let d2 = 0;
+
+        let currentLegStarter = (state.currentLegNumber % 2 !== 0) ? state.bullWinner : (state.bullWinner === 1 ? 2 : 1);
+        let simulatingTurn = currentLegStarter;
+
+        state.currentLegVisits.forEach((v, idx) => {
+            v.player = simulatingTurn;
+            v.playerName = simulatingTurn === 1 ? state.p1Name : state.p2Name;
+
+            let isLastVisit = (idx === state.currentLegVisits.length - 1);
+            let customDartCount = v.dartsUsed || 3;
+
+            if (simulatingTurn === 1) {
+                let testScore = s1 - v.scored;
+                if (testScore < 0 || testScore === 1) {
+                    v.isBust = true;
+                    d1 += 3;
+                } else {
+                    v.isBust = false;
+                    s1 = testScore;
+                    d1 += isLastVisit ? customDartCount : 3;
+                }
+            } else {
+                let testScore = s2 - v.scored;
+                if (testScore < 0 || testScore === 1) {
+                    v.isBust = true;
+                    d2 += 3;
+                } else {
+                    v.isBust = false;
+                    s2 = testScore;
+                    d2 += isLastVisit ? customDartCount : 3;
+                }
+            }
+
+            simulatingTurn = simulatingTurn === 1 ? 2 : 1;
+        });
+
+        state.p1Score = s1;
+        state.p2Score = s2;
+        state.p1LegDarts = d1;
+        state.p2LegDarts = d2;
+        state.activeTurn = simulatingTurn;
+        updateUI();
+    }
+
+    function canFinishInOneDart(score) {
+        if (score === 50) return true;
+        if (score >= 2 && score <= 40 && score % 2 === 0) return true;
+        return false;
+    }
+
+    function canFinishInTwoDarts(score) {
+        if (score <= 1) return false;
+        if (score <= 100 && score !== 99) return true;
+        const highTwoDarts = [101, 104, 107, 110];
+        if (highTwoDarts.includes(score)) return true;
+        return false;
+    }
+
+    function openCheckoutModal(winnerPlayer, scoreBeforeCheckout) {
+        let winnerName = winnerPlayer === 1 ? state.p1Name : state.p2Name;
+
+        let possibleIn1 = canFinishInOneDart(scoreBeforeCheckout);
+        let possibleIn2 = canFinishInTwoDarts(scoreBeforeCheckout);
+
+        if (!possibleIn1 && !possibleIn2) {
+            finalizeCheckoutAutomatically(winnerPlayer, 3);
+            return;
+        }
+
+        document.getElementById('checkout-player-label').innerText = `${winnerName} reached 0 from ${scoreBeforeCheckout}!`;
+
+        let buttonsHtml = '';
+        if (possibleIn1) {
+            buttonsHtml += `<button onclick="finalizeCheckout(1)" class="bg-slate-950 border border-slate-700 hover:border-amber-400 py-3 rounded-xl text-base font-black text-white transition cursor-pointer">1 Dart</button>`;
+        }
+        if (possibleIn2) {
+            buttonsHtml += `<button onclick="finalizeCheckout(2)" class="bg-slate-950 border border-slate-700 hover:border-amber-400 py-3 rounded-xl text-base font-black text-white transition cursor-pointer">2 Darts</button>`;
+        }
+        buttonsHtml += `<button onclick="finalizeCheckout(3)" class="bg-slate-950 border border-slate-700 hover:border-amber-400 py-3 rounded-xl text-base font-black text-white transition cursor-pointer">3 Darts</button>`;
+
+        const container = document.getElementById('checkout-buttons-container');
+        let colsCount = 1;
+        if (possibleIn1 && possibleIn2) colsCount = 3;
+        else if (possibleIn1 || possibleIn2) colsCount = 2;
+
+        container.className = `grid grid-cols-${colsCount} gap-2`;
+        container.innerHTML = buttonsHtml;
+
+        window.pendingLegWinner = winnerPlayer;
+        document.getElementById('modal-checkout').classList.remove('hidden');
+    }
+
+    function finalizeCheckoutAutomatically(winnerPlayer, dartsCount) {
+        let lastVisit = state.currentLegVisits[state.currentLegVisits.length - 1];
+        lastVisit.dartsUsed = dartsCount;
+        recalculateLegScores();
+        handleLegWin(winnerPlayer);
+    }
+
+    function finalizeCheckout(dartsCount) {
+        document.getElementById('modal-checkout').classList.add('hidden');
+        let lastVisit = state.currentLegVisits[state.currentLegVisits.length - 1];
+        lastVisit.dartsUsed = dartsCount;
+
+        recalculateLegScores();
+        handleLegWin(window.pendingLegWinner);
+    }
+
+    function handleLegWin(winner) {
+        let winnerName = winner === 1 ? state.p1Name : state.p2Name;
+
+        state.allLegsHistory.push({
+            legNumber: state.currentLegNumber,
+            winner: winnerName,
+            winnerPlayerCode: winner,
+            p1FinalDarts: state.p1LegDarts,
+            p2FinalDarts: state.p2LegDarts,
+            p1FinalRest: state.p1Score,
+            p2FinalRest: state.p2Score,
+            visits: JSON.parse(JSON.stringify(state.currentLegVisits))
+        });
+
+        if (winner === 1) state.p1Legs++;
+        else state.p2Legs++;
+
+        if (state.p1Legs >= state.legsToWin || state.p2Legs >= state.legsToWin) {
+            state.matchOver = true;
+            updateUI();
+            showMatchSummaryModal(winnerName);
+        } else {
+            state.currentLegNumber++;
+            initNewLeg();
+        }
+    }
+
+    function updateUI() {
+        document.getElementById('score-p1').innerText = state.p1Score;
+        document.getElementById('score-p2').innerText = state.p2Score;
+        document.getElementById('legs-p1').innerText = state.p1Legs;
+        document.getElementById('legs-p2').innerText = state.p2Legs;
+        document.getElementById('darts-p1').innerText = state.p1LegDarts;
+        document.getElementById('darts-p2').innerText = state.p2LegDarts;
+
+        document.getElementById('match-leg-indicator').innerText = `Leg ${state.currentLegNumber} of ${state.maxLegs}`;
+
+        const cardP1 = document.getElementById('card-p1');
+        const cardP2 = document.getElementById('card-p2');
+
+        if (state.activeTurn === 1) {
+            cardP1.className = "bg-slate-900 border-2 border-amber-400 shadow-md shadow-amber-500/20 rounded-xl p-2.5 text-center transition-all duration-200";
+            cardP2.className = "bg-slate-900/50 border-2 border-slate-800/80 opacity-70 rounded-xl p-2.5 text-center transition-all duration-200";
+
+            document.getElementById('name-p1-display').className = "font-black text-amber-400 truncate text-[11px] uppercase tracking-wider";
+            document.getElementById('name-p2-display').className = "font-bold text-slate-500 truncate text-[11px]";
+        } else {
+            cardP2.className = "bg-slate-900 border-2 border-amber-400 shadow-md shadow-amber-500/20 rounded-xl p-2.5 text-center transition-all duration-200";
+            cardP1.className = "bg-slate-900/50 border-2 border-slate-800/80 opacity-70 rounded-xl p-2.5 text-center transition-all duration-200";
+
+            document.getElementById('name-p2-display').className = "font-black text-amber-400 truncate text-[11px] uppercase tracking-wider";
+            document.getElementById('name-p1-display').className = "font-bold text-slate-500 truncate text-[11px]";
+        }
+    }
+
+    function openHistoryModal() {
+        let contentHtml = '';
+
+        if (state.allLegsHistory.length > 0) {
+            contentHtml += `<div class="text-amber-400 font-bold mb-1.5">Completed Legs (Tap to Reopen):</div>`;
+            state.allLegsHistory.forEach((leg) => {
+                contentHtml += `
+                        <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl mb-2">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-bold text-white text-xs">Leg ${leg.legNumber} (${leg.winner})</span>
+                                <button onclick="reopenLeg(${leg.legNumber})" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1 rounded-lg text-[10px] font-black transition cursor-pointer">Reopen</button>
+                            </div>
+                            <div class="space-y-0.5 text-slate-400 pl-1 border-l border-slate-800 text-[10px]">
+                    `;
+                leg.visits.forEach(v => {
+                    contentHtml += `<div>${v.playerName}: ${v.scored} pts</div>`;
+                });
+                contentHtml += `</div></div>`;
+            });
+        }
+
+        contentHtml += `<div class="text-amber-400 font-bold mt-3 mb-1.5">Current Leg Throws:</div>`;
+        if (state.currentLegVisits.length === 0) {
+            contentHtml += '<p class="text-slate-500 text-center py-2 text-[11px]">No throws recorded yet.</p>';
+        } else {
+            state.currentLegVisits.forEach((v, idx) => {
+                let badge = v.isBust ? '<span class="text-red-400 font-bold ml-1">[BUST]</span>' : '';
+                contentHtml += `
+                        <div class="flex justify-between items-center bg-slate-950 border border-slate-800 p-2 rounded-xl mb-1.5">
+                            <div>
+                                <span class="text-slate-400 font-medium text-[10px]">#${idx + 1}</span>
+                                <strong class="text-white ml-1 text-xs">${v.playerName}</strong>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-amber-400 font-bold text-xs">${v.scored} pts</span> ${badge}
+                                <button onclick="openEditKeypad(${idx})" class="bg-slate-800 hover:bg-slate-700 text-white px-2 py-0.5 rounded-lg text-[10px] font-semibold cursor-pointer">Edit</button>
+                            </div>
+                        </div>
+                    `;
+            });
+        }
+
+        document.getElementById('history-list-content').innerHTML = contentHtml;
+        document.getElementById('modal-history').classList.remove('hidden');
+    }
+
+    function closeHistoryModal() {
+        document.getElementById('modal-history').classList.add('hidden');
+    }
+
+    function reopenLeg(legNum) {
+        let legIndex = state.allLegsHistory.findIndex(l => l.legNumber === legNum);
+        if (legIndex === -1) return;
+
+        let targetLeg = state.allLegsHistory[legIndex];
+
+        if (targetLeg.winnerPlayerCode === 1) state.p1Legs--;
+        else state.p2Legs--;
+
+        state.allLegsHistory = state.allLegsHistory.slice(0, legIndex);
+
+        state.currentLegNumber = targetLeg.legNumber;
+        state.currentLegVisits = targetLeg.visits;
+        state.matchOver = false;
+
+        document.getElementById('modal-history').classList.add('hidden');
+        document.getElementById('modal-summary').classList.add('hidden');
+        document.getElementById('screen-game').classList.remove('hidden');
+
+        recalculateLegScores();
+    }
+
+    function openEditKeypad(index) {
+        state.editingVisitIndex = index;
+        let visit = state.currentLegVisits[index];
+        state.editingInputString = visit.scored.toString();
+        state.isFreshEditInput = true;
+
+        document.getElementById('edit-player-label').innerText = `Editing throw for ${visit.playerName}`;
+        updateEditKeypadDisplay();
+
+        document.getElementById('modal-history').classList.add('hidden');
+        document.getElementById('modal-edit-keypad').classList.remove('hidden');
+    }
+
+    function editKeypadPress(numChar) {
+        if (state.isFreshEditInput) {
+            state.editingInputString = numChar;
+            state.isFreshEditInput = false;
+        } else {
+            if (state.editingInputString === "0") {
+                state.editingInputString = numChar;
+            } else {
+                let newVal = state.editingInputString + numChar;
+                if (parseInt(newVal) > 180) {
+                    newVal = "180";
+                }
+                state.editingInputString = newVal;
+            }
+        }
+        updateEditKeypadDisplay();
+    }
+
+    function editKeypadClear() {
+        state.editingInputString = "";
+        state.isFreshEditInput = false;
+        updateEditKeypadDisplay();
+    }
+
+    function updateEditKeypadDisplay() {
+        const displayEl = document.getElementById('edit-input-display');
+        displayEl.innerText = state.editingInputString === "" ? "0" : state.editingInputString;
+    }
+
+    function saveEditedThrow() {
+        if (state.editingInputString === "") return;
+        let newScore = parseInt(state.editingInputString);
+
+        if (isNaN(newScore) || newScore < 0 || newScore > 180) {
+            alert("Please enter a valid score between 0 and 180.");
+            return;
+        }
+
+        state.currentLegVisits[state.editingVisitIndex].scored = newScore;
+        recalculateLegScores();
+
+        document.getElementById('modal-edit-keypad').classList.add('hidden');
+        openHistoryModal();
+    }
+
+    function cancelEditThrow() {
+        document.getElementById('modal-edit-keypad').classList.add('hidden');
+        openHistoryModal();
+    }
+
+    function showMatchSummaryModal(overallWinner) {
+        document.getElementById('modal-title').innerText = `🎉 ${overallWinner} Wins!`;
+
+        let htmlContent = '';
+        state.allLegsHistory.forEach(leg => {
+            htmlContent += `
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 mb-2">
+                        <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-1.5">
+                            <h3 class="font-bold text-amber-400 text-xs">Leg ${leg.legNumber}</h3>
+                            <div class="flex items-center space-x-1.5">
+                                <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-semibold">Winner: ${leg.winner}</span>
+                                <button onclick="closeMatchSummaryAndReopen(${leg.legNumber})" class="bg-slate-800 hover:bg-slate-700 text-amber-400 px-2 py-0.5 rounded text-[10px] font-semibold cursor-pointer">Reopen</button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-300">
+                            <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
+                                <div class="font-bold text-white mb-0.5">${state.p1Name}</div>
+                                <div>Darts: <span class="text-amber-400 font-semibold">${leg.p1FinalDarts}</span></div>
+                                <div>Rest: <span class="text-white font-semibold">${leg.p1FinalRest}</span></div>
+                            </div>
+                            <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
+                                <div class="font-bold text-white mb-0.5">${state.p2Name}</div>
+                                <div>Darts: <span class="text-amber-400 font-semibold">${leg.p2FinalDarts}</span></div>
+                                <div>Rest: <span class="text-white font-semibold">${leg.p2FinalRest}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        document.getElementById('match-recap-content').innerHTML = htmlContent;
+        document.getElementById('modal-summary').classList.remove('hidden');
+    }
+
+    function closeMatchSummaryAndReopen(legNum) {
+        document.getElementById('modal-summary').classList.add('hidden');
+        reopenLeg(legNum);
+    }
+
+    function resetMatch() {
+        state.matchOver = false;
+        document.getElementById('modal-checkout').classList.add('hidden');
+        document.getElementById('modal-history').classList.add('hidden');
+        document.getElementById('modal-edit-keypad').classList.add('hidden');
+        document.getElementById('modal-summary').classList.add('hidden');
+        document.getElementById('screen-game').classList.add('hidden');
+        document.getElementById('match-status').classList.add('hidden');
+        document.getElementById('screen-setup').classList.remove('hidden');
+    }
+</script>
+</body>
+</html>
